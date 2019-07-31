@@ -22,13 +22,14 @@ public class ISearchBackward extends EditorAction implements DumbAware {
   }
 
   public ISearchBackward(final boolean defaultRegexp) {
-    super(null);
+    super(new Handler(defaultRegexp));
     setEnabledInModalContext(true);
-    this.setupHandler(new Handler());
-    this.defaultRegexp = defaultRegexp;
   }
 
-  private class Handler extends EditorActionHandler {
+  private static class Handler extends EditorActionHandler {
+    Handler(final boolean defaultRegExp) {
+      this.defaultRegExp = defaultRegExp;
+    }
     @Override
     protected void doExecute(@NotNull Editor editor, @Nullable Caret caret, DataContext dataContext) {
       ISearch searcher = ISearch.from(editor);
@@ -41,7 +42,7 @@ public class ISearchBackward extends EditorAction implements DumbAware {
       }
 
       if (searcher != null) {
-        if (defaultRegexp) {
+        if (this.defaultRegExp) {
           searcher.getFindModel().setRegularExpressions(true);
         }
         searcher.searchBackward();
@@ -56,7 +57,7 @@ public class ISearchBackward extends EditorAction implements DumbAware {
       }
       return !editor.isOneLineMode() && !SEARCH_DISABLED.get(editor, false);
     }
-  }
 
-  private final boolean defaultRegexp; // TODO should this change?
+    private final boolean defaultRegExp;
+  }
 }

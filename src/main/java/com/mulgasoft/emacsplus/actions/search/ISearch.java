@@ -25,6 +25,8 @@ public class ISearch {
     if (editor != null) {
       JComponent hc = editor.getHeaderComponent();
       if (hc instanceof SearchReplaceComponent) {
+        SearchReplaceComponent src = (SearchReplaceComponent) hc;
+        // TODO add keymap/action here?
         return new ISearch(editor, (SearchReplaceComponent) hc);
       }
     }
